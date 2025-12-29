@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Room Banner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg-gradient: radial-gradient(circle at top left, #4ade80 0, #22c55e 15%, #0f766e 45%, #020617 100%);
+      --card-bg: rgba(15, 23, 42, 0.78);
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.15);
+      --text-main: #e5f2ff;
+      --text-soft: #9ca3af;
+      --border-soft: rgba(148, 163, 184, 0.4);
+      --shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.45);
+      --radius-xl: 22px;
+      --transition-fast: 150ms ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: #020617;
+      background-image: var(--bg-gradient);
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+    }
+
+    .banner-shell {
+      width: min(960px, 100vw - 32px);
+      max-height: calc(100vh - 32px);
+      padding: 1px;
+      border-radius: calc(var(--radius-xl) + 1px);
+      background: linear-gradient(
+        135deg,
+        rgba(148, 163, 184, 0.4),
+        rgba(56, 189, 248, 0.9),
+        rgba(34, 197, 94, 0.9)
+      );
+      box-shadow: var(--shadow-soft);
+    }
+
+    .banner-card {
+      border-radius: var(--radius-xl);
+      background: radial-gradient(circle at top right, rgba(34, 197, 94, 0.18), transparent 60%),
+                  radial-gradient(circle at bottom left, rgba(56, 189, 248, 0.2), transparent 55%),
+                  var(--card-bg);
+      border: 1px solid rgba(15, 23, 42, 0.85);
+      padding: 22px 24px 20px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      backdrop-filter: blur(22px) saturate(130%);
+      -webkit-backdrop-filter: blur(22px) saturate(130%);
+    }
+
+    @media (max-width: 720px) {
+      .banner-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    .accent-pill {
+      flex-shrink: 0;
+      width: 68px;
+      height: 68px;
+      border-radius: 24px;
+      background:
+        conic-gradient(from 210deg, #22c55e, #22c55e, #38bdf8, #22c55e);
+      padding: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.95);
+    }
+
+    .accent-pill-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 22px;
+      background: radial-gradient(circle at 30% 0%, rgba(148, 163, 184, 0.7), transparent 55%),
+                  rgba(15, 23, 42, 0.96);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+    }
+
+    .accent-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.9);
+      margin-bottom: 6px;
+      position: relative;
+    }
+
+    .accent-dot::after {
+      content: "";
+      position: absolute;
+      inset: -5px;
+      border-radius: inherit;
+      border: 1px solid rgba(34, 197, 94, 0.5);
+      opacity: 0.75;
+    }
+
+    .pill-label-main {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .pill-label-sub {
+      font-size: 10px;
+      opacity: 0.8;
+    }
+
+    .content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .eyebrow-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-soft);
+    }
+
+    .eyebrow-tag {
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .eyebrow-tag-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.7);
+    }
+
+    .title-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .title-main {
+      font-size: clamp(22px, 3vw, 28px);
+      font-weight: 650;
+      letter-spacing: 0.02em;
+    }
+
+    .title-gradient {
+      background: linear-gradient(120deg, #e5f2ff, #bbf7d0, #a5f3fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .title-sub {
+      font-size: 13px;
+      color: var(--text-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      opacity: 0.9;
+    }
+
+    .description {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text-soft);
+      max-width: 580px;
+    }
+
+    .description strong {
+      color: #e5f2ff;
+      font-weight: 600;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .meta-left {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.94);
+      border: 1px solid rgba(55, 65, 81, 0.85);
+    }
+
+    .chip-label {
+      font-weight: 500;
+      color: #d1d5db;
+    }
+
+    .chip-value {
+      opacity: 0.85;
+    }
+
+    .chip-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(34, 197, 94, 0.8);
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.7);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid transparent;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: default;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), opacity var(--transition-fast);
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: radial-gradient(circle at 0 0, #bbf7d0 0, #22c55e 30%, #16a34a 80%);
+      color: #052e16;
+      box-shadow: 0 12px 30px rgba(22, 163, 74, 0.55);
+    }
+
+    .btn-secondary {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(148, 163, 184, 0.7);
+      color: #e5f2ff;
+    }
+
+    .btn span.icon {
+      font-size: 14px;
+      transform: translateY(0.5px);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.55);
+      opacity: 0.96;
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 18px 40px rgba(22, 163, 74, 0.75);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.65);
+      opacity: 0.9;
+    }
+
+    .btn.disabled {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
+      transform: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="banner-shell">
+    <div class="banner-card">
+      <div class="accent-pill">
+        <div class="accent-pill-inner">
+          <div class="accent-dot"></div>
+          <div class="pill-label-main">LIVE</div>
+          <div class="pill-label-sub">Room Status</div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="eyebrow-row">
+          <div class="eyebrow-tag">
+            <div class="eyebrow-tag-dot"></div>
+            <span>MATRIX ROOM BANNER</span>
+          </div>
+          <span>Custom • Widget • HUD</span>
+        </div>
+
+        <div class="title-row">
+          <div class="title-main title-gradient">Control Room · Online</div>
+          <div class="title-sub">signal · sync · observe</div>
+        </div>
+
+        <p class="description">
+          Welcome to your <strong>mission console</strong>. Use this room to track status,
+          pin important links, and coordinate experiments. Edit this banner&rsquo;s text in
+          your hosted HTML to match the identity of your space.
+        </p>
+
+        <div class="meta-row">
+          <div class="meta-left">
+            <div class="chip">
+              <div class="chip-indicator"></div>
+              <span class="chip-label">Latency</span>
+              <span class="chip-value">Nominal</span>
+            </div>
+            <div class="chip">
+              <span class="chip-label">Members</span>
+              <span class="chip-value">Live crew + guests</span>
+            </div>
+            <div class="chip">
+              <span class="chip-label">Mode</span>
+              <span class="chip-value">Low noise / high focus</span>
+            </div>
+          </div>
+
+          <div class="actions">
+            <div class="btn btn-primary">
+              <span class="icon">●</span>
+              <span>Now Playing: Chat</span>
+            </div>
+            <div class="btn btn-secondary">
+              <span class="icon">☰</span>
+              <span>Room Guide</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
